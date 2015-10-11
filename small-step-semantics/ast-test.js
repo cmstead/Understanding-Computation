@@ -2,20 +2,25 @@
 
 var core = require('./core'),
 	math = require('./math'),
+	statements = require('./statements'),
+
+	environment = require('./environment'),
 	machineFactory = require('./machine'),
-	myAddition = math.build('add', 
+	
+	expression = math.build('add', 
 					math.build('multiply',
 							   core.build('variable', 'x'),
 							   core.build('variable', 'y')),
 					math.build('multiply',
 							   math.build('number', 10),
-							   math.build('number', 7)));
+							   math.build('number', 7))),
 
-
-machineFactory.build(
-	myAddition,
-	{
+	environment = environment.build({
 		x: math.build('number', 2),
 		y: math.build('number', 3)
-	}
-).run();
+	});
+
+console.log(machineFactory.build(
+	statements.build('assign', 'z', expression),
+	environment
+).run());
